@@ -13,32 +13,32 @@
         <input type="text" id="display" />
 
         <div id="simbols">
-            <button id="buttonAdd" onclick="input(' + ')">+</button>
-            <button id="buttonSubtract" onclick="input(' - ')">-</button>
-            <button id="buttonMultiply" onclick="input(' × ')">×</button>
-            <button id="buttonDivide" onclick="input(' ÷ ')">÷</button>
+            <button id="+" onclick="input(' + ')">+</button>
+            <button id="-" onclick="input(' - ')">-</button>
+            <button id="*" onclick="input(' × ')">×</button>
+            <button id="/" onclick="input(' ÷ ')">÷</button>
         </div>
 
         <div id="numbers">
             <div id="row">
-                <button id="button1" onclick="input('1')">1</button>
-                <button id="button2" onclick="input('2')">2</button>
-                <button id="button3" onclick="input('3')">3</button>
+                <button id="1" onclick="input('1')">1</button>
+                <button id="2" onclick="input('2')">2</button>
+                <button id="3" onclick="input('3')">3</button>
             </div>
             <div id="row">
-                <button id="button4" onclick="input('4')">4</button>
-                <button id="button5" onclick="input('5')">5</button>
-                <button id="button6" onclick="input('6')">6</button>
+                <button id="4" onclick="input('4')">4</button>
+                <button id="5" onclick="input('5')">5</button>
+                <button id="6" onclick="input('6')">6</button>
             </div>
             <div id="row">
-                <button id="button7" onclick="input('7')">7</button>
-                <button id="button8" onclick="input('8')">8</button>
-                <button id="button9" onclick="input('9')">9</button>
+                <button id="7" onclick="input('7')">7</button>
+                <button id="8" onclick="input('8')">8</button>
+                <button id="9" onclick="input('9')">9</button>
             </div>
             <div id="row">
                 <button onclick="clearDisplay()">🗑</button>
-                <button id="button0" onclick="input('0')">0</button>
-                <button id="buttonEqual">=</button>
+                <button id="0" onclick="input('0')">0</button>
+                <button id="Enter">=</button>
             </div>
         </div>
     </main>
@@ -54,123 +54,23 @@
     }
 
     window.addEventListener("keydown", (e) => {
+        console.log(e)
+
+        const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+        const symbols = ['+', '-', '*', '/']
+
         const key = document.getElementById(e.key);
+
         if (key) key.classList.add("pressed");
-    });
+        if (numbers.includes(e.key)) input(e.key);
+        if (numbers.includes(e.key)) {
 
-    window.addEventListener("keyup", (e) => {
-        let buttonId;
-        switch (e.key) {
-            case '1':
-                buttonId = 'button1';
-                break;
-            case '2':
-                buttonId = 'button2';
-                break;
-            case '3':
-                buttonId = 'button3';
-                break;
-            case '4':
-                buttonId = 'button4';
-                break;
-            case '5':
-                buttonId = 'button5';
-                break;
-            case '6':
-                buttonId = 'button6';
-                break;
-            case '7':
-                buttonId = 'button7';
-                break;
-            case '8':
-                buttonId = 'button8';
-                break;
-            case '9':
-                buttonId = 'button9';
-                break;
-            case '0':
-                buttonId = 'button0';
-                break;
-            case '+':
-                buttonId = 'buttonAdd';
-                break;
-            case '-':
-                buttonId = 'buttonSubtract';
-                break;
-            case '*':
-                buttonId = 'buttonMultiply';
-                break;
-            case '/':
-                buttonId = 'buttonDivide';
-                break;
-            case 'Enter':
-                buttonId = 'buttonEqual';
-                calculateResult();
-                break;
-            default:
-                return; // 처리하지 않는 키는 무시
-        }
-
-        const button = document.getElementById(buttonId);
-        if (button) {
-            button.classList.add("pressed");
-            input(e.key); // 해당 키로 입력
         }
     });
 
     window.addEventListener("keyup", (e) => {
-        let buttonId;
-        switch (e.key) {
-            case '1':
-                buttonId = 'button1';
-                break;
-            case '2':
-                buttonId = 'button2';
-                break;
-            case '3':
-                buttonId = 'button3';
-                break;
-            case '4':
-                buttonId = 'button4';
-                break;
-            case '5':
-                buttonId = 'button5';
-                break;
-            case '6':
-                buttonId = 'button6';
-                break;
-            case '7':
-                buttonId = 'button7';
-                break;
-            case '8':
-                buttonId = 'button8';
-                break;
-            case '9':
-                buttonId = 'button9';
-                break;
-            case '0':
-                buttonId = 'button0';
-                break;
-            case '+':
-                buttonId = 'buttonAdd';
-                break;
-            case '-':
-                buttonId = 'buttonSubtract';
-                break;
-            case '*':
-                buttonId = 'buttonMultiply';
-                break;
-            case '/':
-                buttonId = 'buttonDivide';
-                break;
-            default:
-                return; // 처리하지 않는 키는 무시
-        }
-
-        const button = document.getElementById(buttonId);
-        if (button) {
-            button.classList.remove("pressed");
-        }
+        const key = document.getElementById(e.key);
+        if (key) key.classList.remove("pressed");
     });
 </script>
 
