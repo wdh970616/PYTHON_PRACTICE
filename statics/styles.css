@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+15&display=swap');
+
+body {
+    user-select: none;
+
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    margin: 0;
+    padding: 0;
+
+    background-color: whitesmoke;
+}
+
+main {
+    /* box-shadow: 0 0 0 2px blue inset; */
+
+    height: 80%;
+    width: 40%;
+}
+
+#display {
+    height: 100px;
+    width: 90%;
+
+    font-family: "Jersey 15", sans-serif;
+    font-size: 60px;
+
+    text-align: right;
+}
+
+#simbols {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#numbers {
+    box-shadow: 0 0 0 2px black inset;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    font-family: "Jersey 15", sans-serif;
+    font-size: 60px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    margin: 15px;
+
+    height: 70px;
+    width: 75px;
+
+    background-color: gainsboro;
+    border: none;
+    border-radius: 5px;
+
+    box-shadow: 0 9px #999;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
