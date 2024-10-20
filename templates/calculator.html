@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기 만들기</title>
+    <link rel="stylesheet" href="/statics/styles.css">
+</head>
+
+<body>
+    <main>
+        <!-- 입력 표시창 -->
+        <div class="display">
+            <span id="guideDisplay">계산할 값을 입력해주세요</span>
+            <input type="text" id="display" placeholder="0" disabled />
+        </div>
+
+        <!-- 연산자 입력 버튼 -->
+        <div id="simbols">
+            <button id="+" onclick="input('+')">+</button>
+            <button id="-" onclick="input('-')">-</button>
+            <button id="*" onclick="input('×')">×</button>
+            <button id="/" onclick="input('÷')">÷</button>
+        </div>
+
+        <!-- 숫자 입력버튼(한 줄에 3개씩 나눠놓음) -->
+        <div id="numbers">
+            <div id="row">
+                <button id="1" onclick="input('1')">1</button>
+                <button id="2" onclick="input('2')">2</button>
+                <button id="3" onclick="input('3')">3</button>
+            </div>
+            <div id="row">
+                <button id="4" onclick="input('4')">4</button>
+                <button id="5" onclick="input('5')">5</button>
+                <button id="6" onclick="input('6')">6</button>
+            </div>
+            <div id="row">
+                <button id="7" onclick="input('7')">7</button>
+                <button id="8" onclick="input('8')">8</button>
+                <button id="9" onclick="input('9')">9</button>
+            </div>
+            <div id="row">
+                <!-- 계산기초기화 버튼 -->
+                <button id='clear' onclick="clearAll()">↺</button>
+
+                <button id="0" onclick="input('0')">0</button>
+
+                <!-- 계산 실행 버튼 -->
+                <button id="Enter" onclick='calculateResult()'>➥</button>
+            </div>
+        </div>
+    </main>
+</body>
+
+<script>
+    // 계산기 초기화하는 함수
+    function clearAll() {
+        document.getElementById('display').value = '';
+        document.getElementById('guideDisplay').textContent = '계산할 값을 입력해주세요';
+    }
+
+    // 한 글자씩 지우는 함수
+    function deleteLastText() {
+        const display = document.getElementById('display');
+        display.value = display.value.slice(0, -1);
+    }
+
+    // 디스플레이에 입력값 적용시키는 함수
+    function input(input) {
+        const display = document.getElementById('display');
+        display.value += input;
+
+        // 입력시마다 커서를 마지막으로 이동시킴
+        display.scrollLeft = display.scrollWidth;
+    }
+
+    // 키가 눌렸는지 상태를 저장하는 객체(반복입력 방지에 필요함)
+    let isKeyPressed = {};
+
+    // 키보드 키 누를때 처리
+    window.addEventListener("keydown", (e) => {
+
+        // 키보드 꾹 누를시 반복입력 방지하기
+        // 입력시 이미 눌려진 상태라면 처리없이 바로 리턴
+        if (isKeyPressed[e.key]) return;
+        // 아니라면 true로 설정해줌
+        isKeyPressed[e.key] = true;
+
+        // 입력받을 숫자와 계산기호 배열
+        const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+        const symbols = ['+', '-', '*', '/']
+
+        // 숫자배열에 포함되면 해당 숫자 입력
+        if (numbers.includes(e.key)) input(e.key);
+
+        // 기호배열에 포함되면 해당 기호 입력
+        if (symbols.includes(e.key)) {
+            // 곱셈기호 표시값 따로 처리
+            if (e.key === '*') input('×');
+            // 나눗셈기호 표시값 따로 처리
+            else if (e.key === '/') input('÷');
+            // 그 외는 입력값과 표시값 동일(+, -)
+            else input(`${e.key}`);
+        }
+
+        // 백스페이스바 입력시 하나씩 지워줌
+        if (e.key === 'Backspace') {
+            deleteLastText();
+        }
+
+        // del 또는 c키 입력시 전체 초기화
+        if (e.key === 'Delete' || e.key === "C" || e.key === 'c') {
+            clearAll();
+        }
+
+        // 엔터 입력시 계산 실행
+        if (e.key === "Enter") {
+            calculateResult();
+        }
+
+        // 키와 버튼을 연결해 버튼 애니메이션 효과 적용
+        const button = document.getElementById(e.key);
+        if (button) button.classList.add('pressed');
+    });
+
+    // 키보드 버튼 뗄 때 처리
+    window.addEventListener("keyup", (e) => {
+        // 키가 떼어지면 상태 초기화
+        isKeyPressed[e.key] = false;
+
+        const key = document.getElementById(e.key);
+        if (key) key.classList.remove("pressed");
+
+        // 키와 버튼을 연결해 버튼 애니메이션 효과 해제
+        const button = document.getElementById(e.key === 'Enter' ? 'Enter' : e.key);
+        if (button) button.classList.remove('pressed');
+    });
+
+    // 계산식을 서버로 보내서 결과를 받아오는 함수
+    async function calculateResult() {
+
+        const display = document.getElementById('display');
+        const guideDisplay = document.getElementById('guideDisplay');
+
+        // 곱셈과 나눗셈의 표시값을 다시 입력값으로 변경
+        const expression = display.value.replace('×', '*').replace('÷', '/');
+
+        try {
+            const response = await fetch("/calculate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ "expression": expression })
+            });
+
+            const data = await response.json();
+
+            if (data.result !== undefined) {
+                // 디스플레이에 표시할 값
+                const newDisplayValue = data.result;
+
+                // 디스플레이의 넓이 가져오기(px 단위)
+                const displayWidth = display.clientWidth;
+                const context = document.createElement('canvas').getContext('2d');
+                context.font = getComputedStyle(display).font; // 디스플레이의 글꼴 스타일 가져오기
+
+                // 계산 결과값의 너비 계산
+                const newDisplayWidth = context.measureText(newDisplayValue).width;
+
+                if (newDisplayWidth > displayWidth) {
+                    guideDisplay.textContent = '표시 범위를 초과하여 값을 표시할 수 없습니다';
+                    display.value = ''; // 디스플레이 초기화'
+                } else {
+                    display.value = newDisplayValue; // 디스플레이값을 계산 결과로 변경
+                }
+            } else {
+                guideDisplay.textContent = "결과값을 찾을 수 없습니다";
+                display.value = '' // 디스플레이 초기화'
+            }
+        } catch (error) {
+            guideDisplay.textContent = "올바른 계산식이 아닙니다";
+            display.value = '' // 디스플레이 초기화'
+        }
+    }
+</script>
+
+</html>
