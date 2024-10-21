@@ -112,6 +112,7 @@
 
         // del 또는 c키 입력시 전체 초기화
         if (e.key === 'Delete' || e.key === "C" || e.key === 'c') {
+            document.getElementById('clear').classList.add('pressed');
             clearAll();
         }
 
@@ -136,6 +137,10 @@
         // 키와 버튼을 연결해 버튼 애니메이션 효과 해제
         const button = document.getElementById(e.key === 'Enter' ? 'Enter' : e.key);
         if (button) button.classList.remove('pressed');
+
+        if (e.key === 'Delete' || e.key === "C" || e.key === 'c') {
+            document.getElementById('clear').classList.remove('pressed');
+        }
     });
 
     // 계산식을 서버로 보내서 결과를 받아오는 함수
