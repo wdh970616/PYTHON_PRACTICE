@@ -112,6 +112,7 @@
 
         // del 또는 c키 입력시 전체 초기화
         if (e.key === 'Delete' || e.key === "C" || e.key === 'c') {
+            // 버튼 연동 애니메이션 처리
             document.getElementById('clear').classList.add('pressed');
             clearAll();
         }
@@ -138,6 +139,7 @@
         const button = document.getElementById(e.key === 'Enter' ? 'Enter' : e.key);
         if (button) button.classList.remove('pressed');
 
+        // 초기화 버튼 연동 애니메이션 처리
         if (e.key === 'Delete' || e.key === "C" || e.key === 'c') {
             document.getElementById('clear').classList.remove('pressed');
         }
